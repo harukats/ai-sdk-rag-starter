@@ -11,15 +11,14 @@ import { embeddings as embeddingsTable } from '../db/schema/embeddings';
 
 export const createResource = async (input: NewResourceParams) => {
   try {
-    const payload = insertResourceSchema.parse(input);
+    const { content } = insertResourceSchema.parse(input);
 
-    const contentWithoutLineBreaks = payload.content.replace('\n', ' ');
     const [resource] = await db
       .insert(resources)
-      .values({ content: contentWithoutLineBreaks })
+      .values({ content })
       .returning();
 
-    const embeddings = await generateEmbeddings(contentWithoutLineBreaks);
+    const embeddings = await generateEmbeddings(content);
     await db.insert(embeddingsTable).values(
       embeddings.map((embedding) => ({
         resourceId: resource.id,
@@ -28,8 +27,9 @@ export const createResource = async (input: NewResourceParams) => {
     );
 
     return 'Resource successfully created and embedded.';
-  } catch (e) {
-    if (e instanceof Error)
-      return e.message.length > 0 ? e.message : 'Error, please try again.';
+  } catch (error) {
+    return error instanceof Error && error.message.length > 0
+      ? error.message
+      : 'Error, please try again.';
   }
 };
