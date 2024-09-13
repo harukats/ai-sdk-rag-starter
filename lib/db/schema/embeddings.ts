@@ -13,12 +13,12 @@ export const embeddings = pgTable(
       { onDelete: 'cascade' },
     ),
     content: text('content').notNull(),
-    embeddings: vector('embeddings', { dimensions: 512 }).notNull(),
+    embedding: vector('embedding', { dimensions: 512 }).notNull(),
   },
   (table) => ({
-    embeddingsIndex: index('embeddingIndex').using(
+    embeddingIndex: index('embeddingIndex').using(
       'hnsw',
-      table.embeddings.op('vector_cosine_ops'),
+      table.embedding.op('vector_cosine_ops'),
     ),
   }),
 );

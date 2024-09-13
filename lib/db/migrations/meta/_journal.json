@@ -15,6 +15,13 @@
       "when": 1726206479565,
       "tag": "0001_ambiguous_jack_power",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1726208879022,
+      "tag": "0002_glossy_arachne",
+      "breakpoints": true
     }
   ]
 }
