@@ -10,3 +10,11 @@ FROM mcr.microsoft.com/devcontainers/javascript-node:1-22-bookworm
 
 # [Optional] Uncomment if you want to install more global node modules
 # RUN su node -c "npm install -g <your-package-list-here>"
+
+COPY Zscaler_Root_CA.crt /usr/local/share/ca-certificates/zscaler-root-ca.crt
+
+RUN apt-get update && \
+    apt-get install -y ca-certificates && \
+    update-ca-certificates
+
+ENV NODE_EXTRA_CA_CERTS=/etc/ssl/certs/ca-certificates.crt
